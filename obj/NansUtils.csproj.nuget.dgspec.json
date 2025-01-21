@@ -1,0 +1,64 @@
+{
+  "format": 1,
+  "restore": {
+    "K:\\Projects\\Coding\\Games\\Unturned\\NansUtils\\NansUtils.csproj": {}
+  },
+  "projects": {
+    "K:\\Projects\\Coding\\Games\\Unturned\\NansUtils\\NansUtils.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "K:\\Projects\\Coding\\Games\\Unturned\\NansUtils\\NansUtils.csproj",
+        "projectName": "NansUtils",
+        "projectPath": "K:\\Projects\\Coding\\Games\\Unturned\\NansUtils\\NansUtils.csproj",
+        "packagesPath": "C:\\Users\\jaden\\.nuget\\packages\\",
+        "outputPath": "K:\\Projects\\Coding\\Games\\Unturned\\NansUtils\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jaden\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net48": {
+          "dependencies": {
+            "System.Net.Http": {
+              "target": "Package",
+              "version": "[4.3.4, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-arm64": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

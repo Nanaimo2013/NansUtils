@@ -46,6 +46,66 @@
       <HintPath>lib\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Steamworks.NET">
+      <HintPath>lib\com.rlabrecque.steamworks.net.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\EmoteCommand.cs" />
+    <Compile Include="Commands\FreezeCommand.cs" />
+    <Compile Include="Commands\GreetCommand.cs" />
+    <Compile Include="Commands\MaxSkillsCommand.cs" />
+    <Compile Include="Commands\TeleportCommand.cs" />
+    <Compile Include="Commands\UpdateCommand.cs" />
+    <Compile Include="NansUtilsPlugin.cs" />
+    <Compile Include="obj\Release\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\ChatUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".github\workflows\build.yml" />
+    <None Include=".github\workflows\release.yml" />
+    <None Include=".vscode\settings.json" />
+    <None Include="obj\Release\build.force" />
+    <None Include="obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Release\NansUtils.csproj.AssemblyReference.cache" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\Assembly-CSharp.dll" />
+    <Content Include="lib\Assembly-CSharp.xml" />
+    <Content Include="lib\Newtonsoft.Json.dll" />
+    <Content Include="lib\Rocket.API.dll" />
+    <Content Include="lib\Rocket.Core.dll" />
+    <Content Include="lib\Rocket.Unturned.dll" />
+    <Content Include="lib\SDG.Glazier.Runtime.dll" />
+    <Content Include="lib\SDG.HostBans.Runtime.dll" />
+    <Content Include="lib\SDG.NetPak.Runtime.dll" />
+    <Content Include="lib\SDG.NetPak.Runtime.xml" />
+    <Content Include="lib\SDG.NetTransport.dll" />
+    <Content Include="lib\StandardAssets.dll" />
+    <Content Include="lib\System.Configuration.dll" />
+    <Content Include="lib\System.Core.dll" />
+    <Content Include="lib\System.Data.dll" />
+    <Content Include="lib\System.dll" />
+    <Content Include="lib\System.Numerics.dll" />
+    <Content Include="lib\System.Runtime.Serialization.dll" />
+    <Content Include="lib\System.Xml.dll" />
+    <Content Include="lib\System.Xml.Linq.dll" />
+    <Content Include="lib\SystemEx.dll" />
+    <Content Include="lib\UnityEngine.CoreModule.dll" />
+    <Content Include="lib\UnityEngine.dll" />
+    <Content Include="lib\Unturned.LiveConfig.Runtime.dll" />
+    <Content Include="lib\UnturnedDat.dll" />
+    <Content Include="lib\com.rlabrecque.steamworks.net.dll" />
+    <Content Include="version.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+    <Folder Include="obj\Release\TempPE\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

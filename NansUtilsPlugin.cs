@@ -1,11 +1,13 @@
+using Steamworks;
 using Rocket.API;
+using Rocket.Core.Logging;
 using Rocket.Core.Plugins;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using UnityEngine;
 using NansUtils.Utils;
 using System.Net.Http;
-using System.Threading.Tasks;
+using System;
 
 namespace NansUtils
 {
@@ -16,26 +18,27 @@ namespace NansUtils
 
         protected override void Load()
         {
-            Logger.Log("NansUtils has been loaded!");
-            U.Events.OnPlayerConnected += OnPlayerConnected;
+            Rocket.Core.Logging.Logger.Log("NansUtils has been loaded!");
+            Provider.onEnemyConnected += OnPlayerConnected;
         }
 
         protected override void Unload()
         {
-            Logger.Log("NansUtils has been unloaded!");
-            U.Events.OnPlayerConnected -= OnPlayerConnected;
+            Rocket.Core.Logging.Logger.Log("NansUtils has been unloaded!");
+            Provider.onEnemyConnected -= OnPlayerConnected;
         }
 
-        private void OnPlayerConnected(UnturnedPlayer player)
+        private void OnPlayerConnected(SteamPlayer steamPlayer)
         {
-            SendWelcomeNotification(player);
-            if (player.IsAdmin)
+            UnturnedPlayer unturnedPlayer = UnturnedPlayer.FromSteamPlayer(steamPlayer);
+            SendWelcomeNotification(unturnedPlayer);
+            if (unturnedPlayer.IsAdmin)
             {
-                CheckForUpdates(player);
+                CheckForUpdates(unturnedPlayer);
             }
         }
 
-        private async void CheckForUpdates(UnturnedPlayer player)
+        public async void CheckForUpdates(UnturnedPlayer player)
         {
             try
             {
@@ -50,7 +53,7 @@ namespace NansUtils
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Failed to check for updates: {ex.Message}");
+                Rocket.Core.Logging.Logger.LogError($"Failed to check for updates: {ex.Message}");
             }
         }
 
