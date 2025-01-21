@@ -28,13 +28,13 @@ jobs:
         
     - name: Read Version
       id: version
-      run: echo "::set-output name=version::$(type version.txt)"
+      run: echo "version=$(type version.txt)" >> $GITHUB_ENV
       
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
           bin/Release/NansUtils.dll
-        name: NansUtils v${{ steps.version.outputs.version }}
+        name: NansUtils v${{ env.version }}
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }} 
