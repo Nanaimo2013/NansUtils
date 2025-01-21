@@ -1,0 +1,27 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*.*.*'  # Trigger on version tags
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Read Version
+      id: version
+      run: echo "version=$(type version.txt)" >> $GITHUB_ENV
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          path/to/your/NansUtils.dll  # Update this path to where your .dll is stored in the repo
+        name: NansUtils v${{ env.version }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }} 
