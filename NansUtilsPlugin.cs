@@ -13,8 +13,8 @@ namespace NansUtils
 {
     public class NansUtilsPlugin : RocketPlugin
     {
-        private const string CurrentVersion = "1.0.0"; // Update this with each release
-        private const string VersionUrl = "https://raw.githubusercontent.com/Nanaimo2013/NansUtils/main/version.txt";
+        public const string CurrentVersion = "1.0.0"; // Update this with each release
+        public const string VersionUrl = "https://raw.githubusercontent.com/Nanaimo2013/NansUtils/main/version.txt";
 
         protected override void Load()
         {

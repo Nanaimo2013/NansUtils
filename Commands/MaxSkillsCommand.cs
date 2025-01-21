@@ -19,19 +19,28 @@ namespace NansUtils.Commands
         {
             if (caller is UnturnedPlayer player)
             {
-                foreach (var skillSet in player.Player.skills.skills)
-                {
-                    foreach (var skill in skillSet)
-                    {
-                        skill.level = skill.max; // Set each skill to its maximum level
-                    }
-                }
+                MaxOutSkills(player);
                 ChatUtils.SendMessage(player, "Your skills have been maxed out!", UnityEngine.Color.green);
             }
             else
             {
                 ChatUtils.SendMessage(caller as UnturnedPlayer, "This command can only be used by players.", UnityEngine.Color.red);
             }
+        }
+
+        private void MaxOutSkills(UnturnedPlayer player)
+        {
+            PlayerSkills skills = player.Player.skills;
+
+            for (byte specialtyIndex = 0; specialtyIndex < skills.skills.Length; specialtyIndex++)
+            {
+                for (byte skillIndex = 0; skillIndex < skills.skills[specialtyIndex].Length; skillIndex++)
+                {
+                    skills.ServerSetSkillLevel(specialtyIndex, skillIndex, skills.skills[specialtyIndex][skillIndex].max);
+                }
+            }
+
+            skills.askSkills(player.CSteamID); // Refresh skills UI
         }
     }
 }

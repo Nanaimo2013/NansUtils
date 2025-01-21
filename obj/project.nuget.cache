@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "g7zQ7x4OrcOdJ5KQqKTvcLMqob/VvOs+8ml8bFg4MgpB238258hE9BPV6hByoYzEQmSJepDp5Izb+uac07kqaQ==",
+  "success": true,
+  "projectFilePath": "K:\\Projects\\Coding\\Games\\Unturned\\NansUtils\\NansUtils.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\jaden\\.nuget\\packages\\system.io\\4.3.0\\system.io.4.3.0.nupkg.sha512",
+    "C:\\Users\\jaden\\.nuget\\packages\\system.net.http\\4.3.4\\system.net.http.4.3.4.nupkg.sha512",
+    "C:\\Users\\jaden\\.nuget\\packages\\system.runtime\\4.3.0\\system.runtime.4.3.0.nupkg.sha512",
+    "C:\\Users\\jaden\\.nuget\\packages\\system.security.cryptography.algorithms\\4.3.0\\system.security.cryptography.algorithms.4.3.0.nupkg.sha512",
+    "C:\\Users\\jaden\\.nuget\\packages\\system.security.cryptography.encoding\\4.3.0\\system.security.cryptography.encoding.4.3.0.nupkg.sha512",
+    "C:\\Users\\jaden\\.nuget\\packages\\system.security.cryptography.primitives\\4.3.0\\system.security.cryptography.primitives.4.3.0.nupkg.sha512",
+    "C:\\Users\\jaden\\.nuget\\packages\\system.security.cryptography.x509certificates\\4.3.0\\system.security.cryptography.x509certificates.4.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}
