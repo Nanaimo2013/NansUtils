@@ -109,7 +109,13 @@ namespace NansUtils.Commands
                     File.WriteAllBytes(pluginPath, data);
                 }
 
+                // Update the current version to the latest version
+                NansUtilsPlugin.CurrentVersion = LatestVersion;
+
                 ChatUtils.SendMessage(player, "Plugin updated successfully to version " + LatestVersion, UnityEngine.Color.green);
+
+                // Optionally, restart the server or notify the user to restart
+                ChatUtils.SendMessage(player, "Please restart the server to apply the update.", UnityEngine.Color.yellow);
             }
             catch (Exception ex)
             {

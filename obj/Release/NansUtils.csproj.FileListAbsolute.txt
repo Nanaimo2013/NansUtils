@@ -4,3 +4,5 @@ K:\Projects\Coding\Games\Unturned\NansUtils\bin\Release\NansUtils.dll
 K:\Projects\Coding\Games\Unturned\NansUtils\bin\Release\NansUtils.pdb
 K:\Projects\Coding\Games\Unturned\NansUtils\obj\Release\NansUtils.dll
 K:\Projects\Coding\Games\Unturned\NansUtils\obj\Release\NansUtils.pdb
+K:\Projects\Coding\Games\Unturned\NansUtils\bin\Release\Newtonsoft.Json.dll
+K:\Projects\Coding\Games\Unturned\NansUtils\obj\Release\NansUtils.csproj.CopyComplete

@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "g7zQ7x4OrcOdJ5KQqKTvcLMqob/VvOs+8ml8bFg4MgpB238258hE9BPV6hByoYzEQmSJepDp5Izb+uac07kqaQ==",
+  "dgSpecHash": "br4m1TsebcoTp/2BRhTsVa10isVGfI8h4CpVJzqYGtxkowyut1Ict3GI8tI1xk1GCGMzpcLLYyXIW2NraxfCBg==",
   "success": true,
   "projectFilePath": "K:\\Projects\\Coding\\Games\\Unturned\\NansUtils\\NansUtils.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\jaden\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\jaden\\.nuget\\packages\\system.io\\4.3.0\\system.io.4.3.0.nupkg.sha512",
     "C:\\Users\\jaden\\.nuget\\packages\\system.net.http\\4.3.4\\system.net.http.4.3.4.nupkg.sha512",
     "C:\\Users\\jaden\\.nuget\\packages\\system.runtime\\4.3.0\\system.runtime.4.3.0.nupkg.sha512",
