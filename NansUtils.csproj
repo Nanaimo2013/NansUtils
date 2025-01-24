@@ -68,6 +68,7 @@
     <Compile Include="Commands\TeleportCommand.cs" />
     <Compile Include="Commands\UpdateCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
+    <Compile Include="Commands\TrollCommand.cs" />
     <Compile Include="NansUtilsPlugin.cs" />
     <Compile Include="obj\Release\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

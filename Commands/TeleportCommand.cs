@@ -142,14 +142,15 @@ namespace NansUtils.Commands
                     return;
                 }
 
-                // Try to find location using the newer API
-                var locations = LocationDevkitNodeSystem.Get().GetAllNodes();
-                var location = locations.FirstOrDefault(l => 
-                    l.locationName.ToLower().Contains(command[0].ToLower()));
-                
+                // Try to find location in the map's locations
+                var searchName = command[0].ToLower();
+                var nodes = FindLocationsOnMap();
+                var location = nodes.FirstOrDefault(l => 
+                    l.locationName.ToLower().Contains(searchName));
                 if (location != null)
                 {
-                    TeleportToCoordinates(player, location.transform.position);
+                    Vector3 spawnPoint = location.transform.position;
+                    TeleportToCoordinates(player, spawnPoint);
                     ChatUtils.SendMessage(player, $"Teleported to location: {location.locationName}", Color.green);
                     return;
                 }
@@ -204,6 +205,11 @@ namespace NansUtils.Commands
                 }
             }
             ChatUtils.SendMessage(target, $"Teleported {count} players to you.", Color.green);
+        }
+
+        private IEnumerable<LocationDevkitNode> FindLocationsOnMap()
+        {
+            return LocationDevkitNodeSystem.Get().GetAllNodes();
         }
     }
 } 
