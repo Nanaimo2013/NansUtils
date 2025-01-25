@@ -61,6 +61,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\ClearItemsCommand.cs" />
     <Compile Include="Commands\EmoteCommand.cs" />
     <Compile Include="Commands\FreezeCommand.cs" />
     <Compile Include="Commands\GreetCommand.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Commands\UpdateCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\TrollCommand.cs" />
+    <Compile Include="Commands\VehicleCommand.cs" />
     <Compile Include="NansUtilsPlugin.cs" />
     <Compile Include="obj\Release\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
