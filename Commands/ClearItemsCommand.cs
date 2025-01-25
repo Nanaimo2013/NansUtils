@@ -68,23 +68,14 @@ namespace NansUtils.Commands
                     var items = regions[x, y].items;
                     if (items == null) continue;
 
-                    // Create a list to store items that need to be removed
-                    var itemsToRemove = new List<ItemData>();
-
                     // Check each item in the region
-                    foreach (var item in items)
+                    foreach (var item in items.ToList())
                     {
                         if (range == -1 || Vector3.Distance(item.point, player.Position) <= range)
                         {
-                            itemsToRemove.Add(item);
+                            ItemManager.askClearRegionItems(x, y);
                             itemsCleared++;
                         }
-                    }
-
-                    // Remove the items
-                    foreach (var item in itemsToRemove)
-                    {
-                        ItemManager.dropItem(item.item, item.point, true, true, true);
                     }
                 }
             }

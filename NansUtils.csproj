@@ -47,6 +47,10 @@
       <HintPath>lib\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>lib\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Steamworks.NET">
       <HintPath>lib\com.rlabrecque.steamworks.net.dll</HintPath>
       <Private>False</Private>
@@ -62,9 +66,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\ClearItemsCommand.cs" />
+    <Compile Include="Commands\ClearVehiclesCommand.cs" />
     <Compile Include="Commands\EmoteCommand.cs" />
     <Compile Include="Commands\FreezeCommand.cs" />
     <Compile Include="Commands\GreetCommand.cs" />
+    <Compile Include="Commands\JumpCommand.cs" />
     <Compile Include="Commands\MaxSkillsCommand.cs" />
     <Compile Include="Commands\TeleportCommand.cs" />
     <Compile Include="Commands\UpdateCommand.cs" />

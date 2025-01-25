@@ -26,10 +26,12 @@ namespace NansUtils.Commands
                 ChatUtils.SendMessage(player, "/emote <action> - Perform an emote action", Color.cyan);
                 ChatUtils.SendMessage(player, "/teleport (tp) - Various teleport commands. Use /tp for help", Color.cyan);
                 ChatUtils.SendMessage(player, "/cleari [range] - Clear items from ground. Optional range 1-100", Color.cyan);
+                ChatUtils.SendMessage(player, "/clearv [range] - Clear vehicles from map. Optional range 1-100", Color.cyan);
                 ChatUtils.SendMessage(player, "/troll <player> <effect> - Apply various troll effects to players", Color.cyan);
                 ChatUtils.SendMessage(player, "/freeze <player> - Freeze or unfreeze a player", Color.cyan);
                 ChatUtils.SendMessage(player, "/repair - Repair the vehicle you are in", Color.cyan);
                 ChatUtils.SendMessage(player, "/refuel - Refuel the vehicle you are in", Color.cyan);
+                ChatUtils.SendMessage(player, "/jump - Teleport to where you are looking", Color.cyan);
                 ChatUtils.SendMessage(player, "Use each command to see more detailed help.", Color.cyan);
             }
         }
