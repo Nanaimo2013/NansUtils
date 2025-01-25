@@ -13,7 +13,7 @@ namespace NansUtils
 {
     public class NansUtilsPlugin : RocketPlugin
     {
-        public static string CurrentVersion { get; set; } = "1.0.4"; // Update this with each release
+        public static string CurrentVersion { get; set; } = "1.0.5"; // Update this with each release
         public const string VersionUrl = "https://raw.githubusercontent.com/Nanaimo2013/NansUtils/main/version.txt";
 
         protected override void Load()
