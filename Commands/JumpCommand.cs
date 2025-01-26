@@ -12,30 +12,63 @@ namespace NansUtils.Commands
         public AllowedCaller AllowedCaller => AllowedCaller.Player;
         public string Name => "jump";
         public string Help => "Teleports you to where you are looking.";
-        public string Syntax => "/jump";
+        public string Syntax => "/jump [distance]";
         public List<string> Aliases => new List<string>();
         public List<string> Permissions => new List<string> { "nansutils.jump" };
 
-        private const float MAX_DISTANCE = 100f;
+        private const float DEFAULT_DISTANCE = 1000f;
+        private const float HEIGHT_OFFSET = 6f;
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
             UnturnedPlayer player = (UnturnedPlayer)caller;
+            float distance = DEFAULT_DISTANCE;
 
-            // Get player's look direction and perform raycast
-            RaycastInfo ray = DamageTool.raycast(new Ray(player.Player.look.aim.position, player.Player.look.aim.forward), MAX_DISTANCE, RayMasks.GROUND);
+            if (command.Length > 0)
+            {
+                if (!float.TryParse(command[0], out distance))
+                {
+                    ChatUtils.SendMessage(player, "Invalid distance. Please use a number.", Color.red);
+                    return;
+                }
+            }
 
-            if (ray.point != Vector3.zero)
+            // Get player's look position
+            Vector3? targetPoint = GetTargetPosition(player, distance);
+
+            if (!targetPoint.HasValue)
             {
-                // Add a small offset to prevent getting stuck in the ground
-                Vector3 teleportPosition = ray.point + new Vector3(0, 0.5f, 0);
-                player.Teleport(teleportPosition, player.Rotation);
-                ChatUtils.SendMessage(player, "Jumped to target location!", Color.green);
+                ChatUtils.SendMessage(player, "No valid location to jump to. Make sure you're looking at a valid position.", Color.red);
+                return;
             }
-            else
+
+            // Add height offset to prevent getting stuck and ensure safe landing
+            Vector3 teleportPosition = targetPoint.Value + new Vector3(0, HEIGHT_OFFSET, 0);
+            player.Teleport(teleportPosition, player.Rotation);
+            ChatUtils.SendMessage(player, $"Jumped to position: {teleportPosition.x:F1}, {teleportPosition.y:F1}, {teleportPosition.z:F1}", Color.green);
+        }
+
+        private Vector3? GetTargetPosition(UnturnedPlayer player, float maxDistance)
+        {
+            var camera = player.Player.look.aim;
+            var ray = new Ray(camera.position, camera.forward);
+
+            // First try to hit something directly
+            RaycastInfo hit = DamageTool.raycast(ray, maxDistance, RayMasks.BLOCK_COLLISION);
+            if (hit.point != Vector3.zero)
             {
-                ChatUtils.SendMessage(player, "No valid location to jump to. Make sure you're looking at the ground.", Color.red);
+                return hit.point;
             }
+
+            // If no direct hit, try to find ground below the end point
+            var endPosition = camera.position + (camera.forward * maxDistance);
+            hit = DamageTool.raycast(new Ray(endPosition + new Vector3(0, 100f, 0), Vector3.down), 200f, RayMasks.GROUND);
+            if (hit.point != Vector3.zero)
+            {
+                return hit.point;
+            }
+
+            return null;
         }
     }
 } 

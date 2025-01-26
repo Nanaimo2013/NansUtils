@@ -2,14 +2,13 @@ using Rocket.API;
 using Rocket.Unturned.Player;
 using System.Collections.Generic;
 using NansUtils.Utils;
+using UnityEngine;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.IO;
-using UnityEngine;
-using System;
-using System.Net.Http;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
-using System.Globalization;
+using System;
 
 namespace NansUtils.Commands
 {
@@ -17,141 +16,128 @@ namespace NansUtils.Commands
     {
         public AllowedCaller AllowedCaller => AllowedCaller.Both;
         public string Name => "update";
-        public string Help => "Checks for updates to the NansUtils plugin.";
-        public string Syntax => "/update [help|check|confirm]";
+        public string Help => "Check for and apply plugin updates.";
+        public string Syntax => "/update [check|apply]";
         public List<string> Aliases => new List<string>();
         public List<string> Permissions => new List<string> { "nansutils.update" };
 
-        private static string LatestVersion { get; set; }
-        private static bool UpdateAvailable { get; set; }
-        private const string GitHubApiUrl = "https://api.github.com/repos/Nanaimo2013/NansUtils/releases/latest";
-        private const string UserAgent = "NansUtilsUpdater";
+        private const string GITHUB_API_URL = "https://api.github.com/repos/Nanotech2023/NansUtils/releases/latest";
+        private static readonly HttpClient client = new HttpClient();
 
-        public async void Execute(IRocketPlayer caller, string[] command)
+        public void Execute(IRocketPlayer caller, string[] command)
         {
-            // Set invariant culture to avoid culture-related issues
-            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-
-            if (command.Length == 0)
+            if (caller is UnturnedPlayer player)
             {
-                ChatUtils.SendMessage((UnturnedPlayer)caller, "Usage: /update [help|check|confirm]", Color.yellow);
-                return;
-            }
-
-            UnturnedPlayer player = (UnturnedPlayer)caller;
-
-            switch (command[0].ToLower())
-            {
-                case "help":
-                    ChatUtils.SendMessage(player, "Update Command Help: /update [help|check|confirm]", Color.green);
-                    break;
-                case "check":
-                    await CheckForUpdates(player);
-                    break;
-                case "confirm":
-                    if (UpdateAvailable)
-                    {
-                        await UpdatePlugin(player);
-                    }
-                    else
-                    {
-                        ChatUtils.SendMessage(player, "No update available to confirm.", Color.red);
-                    }
-                    break;
-                default:
-                    ChatUtils.SendMessage(player, "Invalid option. Use /update help for more information.", Color.red);
-                    break;
+                if (command.Length == 0 || command[0].ToLower() == "check")
+                {
+                    CheckForUpdates(player);
+                }
+                else if (command[0].ToLower() == "apply")
+                {
+                    ApplyUpdate(player);
+                }
+                else
+                {
+                    ChatUtils.SendMessage(player, "Usage: /update [check|apply]", Color.yellow);
+                }
             }
         }
 
-        private async Task CheckForUpdates(UnturnedPlayer player)
+        private async void CheckForUpdates(UnturnedPlayer player)
         {
             try
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd(UserAgent);
-                    string json = await client.GetStringAsync(GitHubApiUrl);
-                    JObject release = JObject.Parse(json);
-                    string latestVersion = release["tag_name"].ToString().Trim();
+                ChatUtils.SendMessage(player, "Checking for updates...", Color.yellow);
 
-                    if (latestVersion != NansUtilsPlugin.CurrentVersion)
-                    {
-                        UpdateAvailable = true;
-                        LatestVersion = latestVersion;
-                        ChatUtils.SendMessage(player, $"A new version {LatestVersion} is available. Current version: {NansUtilsPlugin.CurrentVersion}. Use /update confirm to update.", Color.yellow);
-                    }
-                    else
-                    {
-                        UpdateAvailable = false;
-                        ChatUtils.SendMessage(player, "You are already using the latest version.", Color.green);
-                    }
+                // Get current version
+                Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                string currentVersionStr = $"{currentVersion.Major}.{currentVersion.Minor}.{currentVersion.Build}";
+
+                // Get latest version from GitHub
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("NansUtils");
+                var response = await client.GetStringAsync(GITHUB_API_URL);
+                var json = JObject.Parse(response);
+                string latestVersion = json["tag_name"].ToString().TrimStart('v');
+
+                // Parse versions for comparison
+                Version latest = Version.Parse(latestVersion);
+                
+                if (latest > currentVersion)
+                {
+                    ChatUtils.SendMessage(player, $"New version available: v{latestVersion}", Color.green);
+                    ChatUtils.SendMessage(player, "Use /update apply to update the plugin", Color.green);
+                }
+                else if (latest == currentVersion)
+                {
+                    ChatUtils.SendMessage(player, $"You are running the latest version (v{currentVersionStr})", Color.green);
+                }
+                else
+                {
+                    ChatUtils.SendMessage(player, $"You are running a newer version (v{currentVersionStr}) than the latest release (v{latestVersion})", Color.yellow);
                 }
             }
             catch (Exception ex)
             {
-                ChatUtils.SendMessage(player, $"Failed to check for updates: {ex.Message}", Color.red);
-                Rocket.Core.Logging.Logger.LogError($"Update check error: {ex}");
+                ChatUtils.SendMessage(player, "Failed to check for updates. Check logs for details.", Color.red);
+                Rocket.Core.Logging.Logger.LogError($"Update check failed: {ex.Message}");
             }
         }
 
-        private async Task UpdatePlugin(UnturnedPlayer player)
+        private async void ApplyUpdate(UnturnedPlayer player)
         {
             try
             {
-                ChatUtils.SendMessage(player, "Downloading update...", Color.green);
+                ChatUtils.SendMessage(player, "Checking for updates...", Color.yellow);
 
-                using (HttpClient client = new HttpClient())
+                // Get current version
+                Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                string currentVersionStr = $"{currentVersion.Major}.{currentVersion.Minor}.{currentVersion.Build}";
+
+                // Get latest version info from GitHub
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("NansUtils");
+                var response = await client.GetStringAsync(GITHUB_API_URL);
+                var json = JObject.Parse(response);
+                string latestVersion = json["tag_name"].ToString().TrimStart('v');
+                string downloadUrl = json["assets"][0]["browser_download_url"].ToString();
+
+                // Parse versions for comparison
+                Version latest = Version.Parse(latestVersion);
+
+                if (latest <= currentVersion)
                 {
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd(UserAgent);
-                    string json = await client.GetStringAsync(GitHubApiUrl);
-                    JObject release = JObject.Parse(json);
-                    string downloadUrl = release["assets"].First["browser_download_url"].ToString();
-
-                    // Create a backup of the current plugin
-                    string pluginPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins", "NansUtils.dll");
-                    string backupPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins", "NansUtils.dll.backup");
-                    if (File.Exists(pluginPath))
-                    {
-                        if (File.Exists(backupPath))
-                        {
-                            File.Delete(backupPath);
-                        }
-                        File.Copy(pluginPath, backupPath);
-                    }
-
-                    // Download and save the new version
-                    byte[] data = await client.GetByteArrayAsync(downloadUrl);
-                    File.WriteAllBytes(pluginPath, data);
-
-                    // Update the current version
-                    NansUtilsPlugin.CurrentVersion = LatestVersion;
-
-                    ChatUtils.SendMessage(player, $"Plugin updated successfully to version {LatestVersion}", Color.green);
-                    ChatUtils.SendMessage(player, "Please restart the server to apply the update.", Color.yellow);
+                    ChatUtils.SendMessage(player, $"You are already running the latest version (v{currentVersionStr})", Color.green);
+                    return;
                 }
+
+                // Download and apply update
+                ChatUtils.SendMessage(player, $"Downloading update v{latestVersion}...", Color.yellow);
+                
+                string pluginDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string backupPath = Path.Combine(pluginDir, "NansUtils.dll.bak");
+                string currentPath = Path.Combine(pluginDir, "NansUtils.dll");
+                string downloadPath = Path.Combine(pluginDir, "NansUtils.dll.new");
+
+                // Download new version
+                byte[] newVersion = await client.GetByteArrayAsync(downloadUrl);
+                File.WriteAllBytes(downloadPath, newVersion);
+
+                // Backup current version
+                if (File.Exists(currentPath))
+                {
+                    if (File.Exists(backupPath))
+                        File.Delete(backupPath);
+                    File.Move(currentPath, backupPath);
+                }
+
+                // Apply new version
+                File.Move(downloadPath, currentPath);
+
+                ChatUtils.SendMessage(player, $"Update downloaded successfully. Restart the server to apply the update.", Color.green);
             }
             catch (Exception ex)
             {
-                ChatUtils.SendMessage(player, $"Failed to update plugin: {ex.Message}", Color.red);
-                Rocket.Core.Logging.Logger.LogError($"Update error: {ex}");
-
-                // Try to restore backup if update failed
-                string pluginPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins", "NansUtils.dll");
-                string backupPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins", "NansUtils.dll.backup");
-                if (File.Exists(backupPath))
-                {
-                    try
-                    {
-                        File.Copy(backupPath, pluginPath, true);
-                        ChatUtils.SendMessage(player, "Restored previous version from backup.", Color.yellow);
-                    }
-                    catch (Exception backupEx)
-                    {
-                        Rocket.Core.Logging.Logger.LogError($"Backup restoration error: {backupEx}");
-                    }
-                }
+                ChatUtils.SendMessage(player, "Failed to apply update. Check logs for details.", Color.red);
+                Rocket.Core.Logging.Logger.LogError($"Update failed: {ex.Message}");
             }
         }
     }

@@ -71,12 +71,17 @@
     <Compile Include="Commands\FreezeCommand.cs" />
     <Compile Include="Commands\GreetCommand.cs" />
     <Compile Include="Commands\JumpCommand.cs" />
+    <Compile Include="Commands\KitCommand.cs" />
     <Compile Include="Commands\MaxSkillsCommand.cs" />
     <Compile Include="Commands\TeleportCommand.cs" />
     <Compile Include="Commands\UpdateCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\TrollCommand.cs" />
     <Compile Include="Commands\VehicleCommand.cs" />
+    <Compile Include="Commands\VehicleBoostCommand.cs" />
+    <Compile Include="Commands\BackCommand.cs" />
+    <Compile Include="Models\Kit.cs" />
+    <Compile Include="Services\KitService.cs" />
     <Compile Include="NansUtilsPlugin.cs" />
     <Compile Include="obj\Release\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

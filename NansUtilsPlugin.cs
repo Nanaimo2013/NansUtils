@@ -8,24 +8,29 @@ using UnityEngine;
 using NansUtils.Utils;
 using System.Net.Http;
 using System;
+using System.Reflection;
 
 namespace NansUtils
 {
     public class NansUtilsPlugin : RocketPlugin
     {
-        public static string CurrentVersion { get; set; } = "1.0.5"; // Update this with each release
-        public const string VersionUrl = "https://raw.githubusercontent.com/Nanaimo2013/NansUtils/main/version.txt";
+        public static NansUtilsPlugin Instance { get; private set; }
+        public static string CurrentVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
         protected override void Load()
         {
-            Rocket.Core.Logging.Logger.Log("NansUtils has been loaded!");
+            Instance = this;
+            Rocket.Core.Logging.Logger.Log($"NansUtils v{CurrentVersion} has been loaded!");
             Provider.onEnemyConnected += OnPlayerConnected;
+            PlayerLife.onPlayerDied += OnPlayerDied;
         }
 
         protected override void Unload()
         {
+            Instance = null;
             Rocket.Core.Logging.Logger.Log("NansUtils has been unloaded!");
             Provider.onEnemyConnected -= OnPlayerConnected;
+            PlayerLife.onPlayerDied -= OnPlayerDied;
         }
 
         private void OnPlayerConnected(SteamPlayer steamPlayer)
@@ -38,16 +43,33 @@ namespace NansUtils
             }
         }
 
+        private void OnPlayerDied(PlayerLife sender, EDeathCause cause, ELimb limb, CSteamID instigator)
+        {
+            var unturnedPlayer = UnturnedPlayer.FromPlayer(sender.player);
+            if (unturnedPlayer != null)
+            {
+                Commands.BackCommand.SaveDeathLocation(unturnedPlayer);
+            }
+        }
+
         public async void CheckForUpdates(UnturnedPlayer player)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    string latestVersion = await client.GetStringAsync(VersionUrl);
-                    if (latestVersion.Trim() != CurrentVersion)
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd("NansUtils");
+                    string latestVersion = await client.GetStringAsync("https://api.github.com/repos/Nanaimo2013/NansUtils/releases/latest");
+                    var json = Newtonsoft.Json.Linq.JObject.Parse(latestVersion);
+                    string latest = json["tag_name"].ToString().TrimStart('v');
+
+                    System.Version currentVer = Assembly.GetExecutingAssembly().GetName().Version;
+                    System.Version latestVer = System.Version.Parse(latest);
+
+                    if (latestVer > currentVer)
                     {
-                        ChatUtils.SendMessage(player, $"A new version of NansUtils is available: {latestVersion.Trim()}. Current version: {CurrentVersion}.", Color.yellow);
+                        ChatUtils.SendMessage(player, $"A new version of NansUtils is available: v{latest}. Current version: v{CurrentVersion}.", Color.yellow);
+                        ChatUtils.SendMessage(player, "Use /update to download and install the update.", Color.yellow);
                     }
                 }
             }
@@ -61,7 +83,7 @@ namespace NansUtils
         {
             string pluginName = "NansUtils";
             string authorName = "Nanaimo_2013";
-            string message = $"Thank you {player.CharacterName} for using {pluginName} made by {authorName}!";
+            string message = $"Thank you {player.CharacterName} for using {pluginName} v{CurrentVersion} made by {authorName}!";
             ChatUtils.SendMessage(player, message, Color.green);
         }
     }
